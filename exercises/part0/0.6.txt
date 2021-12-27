@@ -1,0 +1,9 @@
+title FullStack Exercise 0.6
+
+note over browser:
+browser executes js to update the DOM
+with the new note
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: Status Code 201

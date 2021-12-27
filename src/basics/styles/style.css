@@ -1,0 +1,51 @@
+html {
+    /* Set the font for the entire page to the funny looking one I got from fonts.google.com */
+    font-size: 14px;
+    font-family: "Shizuru", sans-serif; 
+
+    /* Set the background color for the root element on the page */
+    background-color: #00539F;
+}
+
+body {
+    /* Center a 600px column for the body with padding to keep text from touching the border */
+    width: 600px;
+    margin: 0 auto;
+    padding: 0 30px 20px 30px;
+    /* Set the body column's background color with a border to distinguish from the root element */
+    background-color: #FF9500;
+    border: 5px solid black;
+}
+
+h1 {
+    /* Set large centered text for headings */
+    font-size: 60px;
+    text-align: center;
+    color: #00539F;
+    /* Disable the default large margin around headers */
+    margin: 0;
+    /* Add back some slight top padding */ 
+    padding: 20px 0;
+    /*  1st Value: horizontal offset: how far it moves across
+        2nd Value: vertical offset: how far it moves down
+        3rd value: blur radius: a larger value produces more fuzz */
+    text-shadow: 3px 3px 1px black;
+}
+
+p, li {
+    /* Set font size and spacing for paragraphs and list elements on the page */
+    font-size: 24px;
+    line-height: 1.5;
+    letter-spacing: 1px;
+}
+
+img {
+    /* Center the image */
+    /* NB: by default this does not work alone! This is because images are NOT block elements.
+        The body element is a block element.
+        Images are inline elements, which are different
+        https://developer.mozilla.org/en-US/docs/Web/CSS/display */
+    margin: 0 auto;
+    /* force the image to be block instead of inline */
+    display: block;
+}
