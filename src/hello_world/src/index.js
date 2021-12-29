@@ -5,3 +5,19 @@ ReactDOM.render(
   <App />,
   document.getElementById('root')
 );
+
+/*
+let counter = 1;
+
+const refresh = () => {
+  ReactDOM.render(
+    <App counter={counter}/>,
+    document.getElementById('root')
+  );
+}
+
+setInterval(() => {
+  refresh();
+  counter += 1;
+}, 1000);
+*/

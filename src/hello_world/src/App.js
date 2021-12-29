@@ -1,20 +1,23 @@
 import React from 'react'
 
-const Hello = (foo) => (
-    <p>Hello {foo.name}, you are {foo.age} years old</p>
-  )
+import Counter from './Counter'
+import Hello from './Hello'
 
-const App = () => {
-  console.log("Hello from component");
+const App = (props) => {
+  console.log("Hello from React Application!");
 
-  const name1 = "Peter";
-  const age1 = 13;
+  const person = {
+    name: 'Skyler',
+    age: 30,
+  };
 
   return (
     <>
       <h1>Greetings</h1>
-      <Hello name={age1} age={age1} />
-      <Hello name="Daisy" age={17} />
+      <Hello person={person} />
+
+      <h1>App Counter</h1>
+      <Counter />
     </>
   );
 }
