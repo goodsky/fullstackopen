@@ -1,0 +1,9 @@
+body {
+  margin: 0 auto;
+  width: 600px;
+  font-family: 'Cairo', sans-serif;
+}
+
+code {
+  font-family: monospace;
+}
