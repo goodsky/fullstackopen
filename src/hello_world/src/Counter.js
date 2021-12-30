@@ -1,9 +1,27 @@
 
 import { useState } from "react";
 
-import Button from './Button';
-import Display from './Display';
-import History from './History';
+const Button = ({ onClick, text }) => {
+    return (
+        <button onClick={onClick}>
+            {text}
+        </button>
+    )
+};
+
+const Display = ({ counter }) => ( <p>{counter}</p> );
+
+const History = ({ clickHistory }) => {
+    if (clickHistory.length === 0) {
+        return (
+            <p><i>Press buttons to start the counters!</i></p>
+        )
+    }
+    
+    return (
+        <p>{clickHistory.join(', ')}</p>
+    );
+};
 
 const Counter = () => {
     // NB: This is a tutorial showing how to use a state object with multiple properties.
