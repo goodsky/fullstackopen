@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const Filter = (props) => {
   const { nameFilter, setNameFilter } = props;
@@ -80,20 +81,20 @@ const Phonebook = ({ persons, nameFilter }) => {
 };
 
 function App() {
-  const [persons, setPersons] = useState([
-    {
-      name: 'Skyler Goodell',
-      number: '123-4567',
-    },
-    {
-      name: 'Kristin Goodell',
-      number: '765-4321',
-    },
-  ]);
+  const [persons, setPersons] = useState([]);
 
   const [nameFilter, setNameFilter] = useState('');
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber ] = useState('');
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(result => {
+        console.log('Fetched persons...', result.data);
+        setPersons(result.data);
+      });
+  }, []);
 
   return (
     <div>
