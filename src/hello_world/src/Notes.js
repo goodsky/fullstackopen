@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import noteService from './services/notes'
 
-const Note = ({ note }) => (<li>{note.content}</li>);
+const Note = ({ note, toggleImportance }) => {
+    const label = note.important
+        ? 'mark not important' : 'mark important';
+
+    return (
+        <li>
+            {note.content}
+            <button onClick={toggleImportance}>{label}</button>
+        </li>);
+};
 
 const Notes = (props) => {
     const [ notes, setNotes ] = useState([]);
@@ -12,8 +21,8 @@ const Notes = (props) => {
     // An empty array signifies that this effect should run only once.
     useEffect(() => {
         console.log('Note effect...');
-        axios
-            .get('http://localhost:3001/notes')
+        noteService
+            .getAll()
             .then(response => {
                 console.log('Note promise fulfilled');
                 setNotes(response.data);
@@ -23,8 +32,8 @@ const Notes = (props) => {
     // Is there any problem with doing this outside of an effect hook?
     // yes... it creates an infinite loop!!!
     // on every render, it will fetch the data... update the notes... which triggers a re-render!
-    // axios
-    //     .get('http://localhost:3001/notes')
+    // noteService
+    //     .getAll()
     //     .then(response => {
     //         console.log('Note promise fulfilled');
     //         setNotes(response.data);
@@ -37,17 +46,44 @@ const Notes = (props) => {
             content: newNote,
             date: new Date().toISOString(),
             important: Math.random() < 0.5,
-            id: notes.length + 1,
         };
 
         console.log('Adding note...', noteObject);
-        setNotes(notes.concat(noteObject));
-        setNewNote('');
+        noteService
+            .create(noteObject)
+            .then(response => {
+                console.log('POST response', response);
+                setNotes(notes.concat(response.data));
+                setNewNote('');
+            });
+        
+        //setNotes(notes.concat(noteObject));
+        //setNewNote('');
     };
 
     const handleNewNoteChange = (event) => {
         console.log('Typing note...', event.target.value);
         setNewNote(event.target.value);
+    };
+
+    const toggleImportanceOf = (id) => {
+        console.log(`importance of ${id} is toggling`);
+        noteService
+            .get(id)
+            .then(response => {
+                const note = response.data;
+                console.log(`fetched note`, note);
+
+                const toggledNote = { ...note, important: !note.important };
+                console.log(`toggled note`, toggledNote);
+
+                noteService
+                    .update(id, toggledNote)
+                    .then(response => {
+                        console.log('toggled importance', response);
+                        setNotes(notes.map(note => note.id !== id ? note : response.data));
+                    });
+            });
     };
 
     const notesToShow = showAll ?
@@ -60,7 +96,7 @@ const Notes = (props) => {
         <div>
             <ul>
                 {notesToShow.map(note =>
-                    <Note key={note.id} note={note} />)}
+                    <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />)}
             </ul>
             <button onClick={() => setShowAll(!showAll)}>
                 {showAll ? 'show important' : 'show all'}
