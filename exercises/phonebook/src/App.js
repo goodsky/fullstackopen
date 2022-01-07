@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import personsService from './services/persons.js'
 
 const Filter = (props) => {
   const { nameFilter, setNameFilter } = props;
@@ -21,26 +21,34 @@ const AddPerson = (props) => {
   const handleAdd = (event) => {
     event.preventDefault();
 
-    const existingPerson = persons.find(person => person.name === newName);
-    if (existingPerson !== undefined) {
-      window.alert(`${newName} is already added to the phonebook`);
-      resetForm();
-      return;
-    }
-
     const newPerson = {
       name: newName,
       number: newNumber,
     };
 
-    console.log('Adding person', newPerson);
-    setPersons(persons.concat(newPerson));
-    resetForm();
-  };
-
-  const resetForm = () => {
     setNewName('');
     setNewNumber('');
+
+    const existingPerson = persons.find(person => person.name === newName);
+    if (existingPerson !== undefined) {
+      const confirmUpdate = window.confirm(`${newName} is already added to the phonebook. Do you want to update the old number with this one?`);
+      if (confirmUpdate) {
+        personsService
+          .update(existingPerson.id, newPerson)
+          .then(response => {
+            console.log('Updated person in db', response);
+            setPersons(persons.map(p => p.id === existingPerson.id ? newPerson : p));
+          });
+      }
+    }
+    else {
+      personsService
+        .create(newPerson)
+        .then(response => {
+          console.log('Saved person to db', response);
+          setPersons(persons.concat(response));
+        });
+    }
   };
 
   return (
@@ -58,23 +66,38 @@ const AddPerson = (props) => {
   );
 };
 
-const Person = ({ person }) => (
+const Person = ({ person, deletePerson }) => (
   <tr>
     <td>{person.name}</td>
     <td>{person.number}</td>
-    </tr>
+    <td><button onClick={deletePerson}>delete</button></td>
+  </tr>
 );
 
-const Phonebook = ({ persons, nameFilter }) => {
+const Phonebook = ({ persons, setPersons, nameFilter }) => {
   const personsToPrint = nameFilter === '' ?
     persons :
     persons.filter(person => person.name.includes(nameFilter));
+
+  const deletePerson = (person) => {
+    const confirmDelete = window.confirm(`Delete ${person.name}?`);
+    if (!confirmDelete) {
+      return;
+    }
+
+    personsService
+      .remove(person.id)
+      .then(_ => {
+        console.log('Deleted person', person);
+        setPersons(persons.filter(p => p.id !== person.id));
+      });
+  };
 
   return (
     <table>
       <tbody>
         {personsToPrint.map(person => 
-          <Person key={person.name} person={person} />)}
+          <Person key={person.name} person={person} deletePerson={() => deletePerson(person)} />)}
       </tbody>
     </table>
   );
@@ -88,11 +111,11 @@ function App() {
   const [newNumber, setNewNumber ] = useState('');
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personsService
+      .getAll()
       .then(result => {
-        console.log('Fetched persons...', result.data);
-        setPersons(result.data);
+        console.log('Fetched persons...', result);
+        setPersons(result);
       });
   }, []);
 
@@ -109,7 +132,7 @@ function App() {
         newNumber={newNumber} setNewNumber={setNewNumber} />
 
       <h2>Numbers</h2>
-      <Phonebook persons={persons} nameFilter={nameFilter} />
+      <Phonebook persons={persons} setPersons={setPersons} nameFilter={nameFilter} />
     </div>
   );
 }
