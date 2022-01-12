@@ -1,6 +1,50 @@
 import React, { useEffect, useState } from 'react'
 import personsService from './services/persons.js'
 
+const Notification = ({message, setMessage}) => {
+  const notificationPopUpDurationMs = 3000;
+  const notificationStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  };
+
+  return message === null ? null : PopUp({message, setMessage, durationMs: notificationPopUpDurationMs, style: notificationStyle });
+}
+
+const Error = ({message, setMessage}) => {
+  const errorPopUpDurationMs = 5000;
+  const errorStyle = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+  };
+
+  return message === null ? null : PopUp({message, setMessage, durationMs: errorPopUpDurationMs, style: errorStyle });
+}
+
+const PopUp = ({message, setMessage, durationMs, style}) => {
+  useEffect(() => {
+    setTimeout(() =>
+      setMessage(null),
+      durationMs); },
+    []);
+
+  return (
+    <div style={style}>
+      {message}
+    </div>
+  )
+}
+
 const Filter = (props) => {
   const { nameFilter, setNameFilter } = props;
 
@@ -16,6 +60,8 @@ const AddPerson = (props) => {
     persons, setPersons,
     newName, setNewName,
     newNumber, setNewNumber,
+    setNotificationMessage,
+    setErrorMessage,
   } = props;
 
   const handleAdd = (event) => {
@@ -38,6 +84,18 @@ const AddPerson = (props) => {
           .then(response => {
             console.log('Updated person in db', response);
             setPersons(persons.map(p => p.id === existingPerson.id ? newPerson : p));
+            setNotificationMessage(`Updated ${newName}`);
+          })
+          .catch(error => {
+            console.log('Failed to update person in db', error);
+            setErrorMessage(`Failed to update ${newName}`);
+            // Refresh our person list to be up to date.
+            personsService
+              .getAll()
+              .then(result => {
+                console.log('Fetched persons...', result);
+                setPersons(result);
+              });
           });
       }
     }
@@ -47,6 +105,18 @@ const AddPerson = (props) => {
         .then(response => {
           console.log('Saved person to db', response);
           setPersons(persons.concat(response));
+          setNotificationMessage(`Added ${newName}`);
+        })
+        .catch(error => {
+          console.log('Failed to save person to db', error);
+          setErrorMessage(`Failed to create ${newName}!`);
+          // Refresh our person list to be up to date.
+          personsService
+            .getAll()
+            .then(result => {
+              console.log('Fetched persons...', result);
+              setPersons(result);
+            });
         });
     }
   };
@@ -74,7 +144,11 @@ const Person = ({ person, deletePerson }) => (
   </tr>
 );
 
-const Phonebook = ({ persons, setPersons, nameFilter }) => {
+const Phonebook = ({
+    persons, setPersons,
+    nameFilter,
+    setNotificationMessage,
+    setErrorMessage }) => {
   const personsToPrint = nameFilter === '' ?
     persons :
     persons.filter(person => person.name.includes(nameFilter));
@@ -90,6 +164,13 @@ const Phonebook = ({ persons, setPersons, nameFilter }) => {
       .then(_ => {
         console.log('Deleted person', person);
         setPersons(persons.filter(p => p.id !== person.id));
+        setNotificationMessage(`Removed ${person.name}`);
+      })
+      .catch(error => {
+        console.log('Failed to delete person', error);
+        // This could fail for other reasons, possibly. But we assume it is only due to race conditions during delete.
+        setPersons(persons.filter(p => p.id !== person.id));
+        setErrorMessage(`Information of ${person.name} has already been removed from server`);
       });
   };
 
@@ -110,6 +191,9 @@ function App() {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber ] = useState('');
 
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+
   useEffect(() => {
     personsService
       .getAll()
@@ -122,6 +206,8 @@ function App() {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Error message={errorMessage} setMessage={setErrorMessage} />
+      <Notification message={notificationMessage} setMessage={setNotificationMessage} />
       <Filter
         nameFilter={nameFilter} setNameFilter={setNameFilter} />
 
@@ -129,10 +215,16 @@ function App() {
       <AddPerson
         persons={persons} setPersons={setPersons}
         newName={newName} setNewName={setNewName}
-        newNumber={newNumber} setNewNumber={setNewNumber} />
+        newNumber={newNumber} setNewNumber={setNewNumber}
+        setNotificationMessage={setNotificationMessage}
+        setErrorMessage={setErrorMessage}  />
 
       <h2>Numbers</h2>
-      <Phonebook persons={persons} setPersons={setPersons} nameFilter={nameFilter} />
+      <Phonebook
+        persons={persons} setPersons={setPersons}
+        nameFilter={nameFilter}
+        setNotificationMessage={setNotificationMessage}
+        setErrorMessage={setErrorMessage} />
     </div>
   );
 }

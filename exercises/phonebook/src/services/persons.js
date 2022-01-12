@@ -11,24 +11,15 @@ const getAll = () => axios
 
 const create = (newPerson) => axios
     .post(personsUrl, newPerson)
-    .then(response => response.data)
-    .catch(error => {
-        alert('Failed to create person', error);
-    });
+    .then(response => response.data);
 
 const remove = (id) => axios
     .delete(`${personsUrl}/${id}`)
-    .then(response => undefined)
-    .catch(error => {
-        alert('Failed to delete person', error);
-    });
+    .then(response => undefined);
 
 const update = (id, updatedPerson) => axios
     .put(`${personsUrl}/${id}`, updatedPerson)
-    .then(response => response.data)
-    .catch(error => {
-        alert('Failed to update person', error);
-    });
+    .then(response => response.data);
 
 export default {
     getAll,
