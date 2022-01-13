@@ -1,0 +1,34 @@
+// Get all people
+GET http://localhost:3001/api/persons
+
+### 
+
+// Add a person
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Testname McFakerson",
+    "number": "123-4567"
+}
+
+###
+
+// [FAIL] Add invalid data
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "foo": 123,
+    "bar": "baz"
+}
+
+###
+
+// Get person
+GET http://localhost:3001/api/persons/1
+
+###
+
+// Delete person
+DELETE http://localhost:3001/api/persons/1
