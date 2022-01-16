@@ -7,8 +7,8 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf build && cd ../phonebook/ && npm run build && cp -r build ../phonebook-backend",
-    "publish": "cp -r index.js package.json package-lock.json build ../../../fullstackopen-heroku && git add . && git commit -m \"deploy phonebook\" && git push heroku main"
+    "build:ui": "rm -rf build && cd ../phonebook/ && npm run build && cp -r build ../phonebook-backend",
+    "deploy": "cp -r index.js package.json package-lock.json build ../../../fullstackopen-heroku && cd ../../../fullstackopen-heroku && git add . && git commit -m \"deploy phonebook\" && git push heroku main"
   },
   "author": "Skyler",
   "license": "MIT",
