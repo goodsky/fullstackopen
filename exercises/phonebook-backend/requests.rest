@@ -25,10 +25,31 @@ Content-Type: application/json
 
 ###
 
+// Update a person
+PUT http://localhost:3001/api/persons/61e793756e273a5df79346c4
+Content-Type: application/json
+
+{
+    "name": "Testname McFakerson",
+    "number": "2"
+}
+
+###
+
 // Get person
+GET http://localhost:3001/api/persons/61e60044d89d6a946ce07372
+
+###
+
+// [FAIL] Get nonexistant person
+GET http://localhost:3001/api/persons/5c41c90e84d891c15dfa3431
+
+###
+
+// [FAIL] Get person with malformed MongoDB id
 GET http://localhost:3001/api/persons/1
 
 ###
 
 // Delete person
-DELETE http://localhost:3001/api/persons/1
+DELETE http://localhost:3001/api/persons/61e79b20ed5d61a1f38b9218
