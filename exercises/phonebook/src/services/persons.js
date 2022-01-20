@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const personsUrl = '/api/persons';
 
@@ -15,7 +15,7 @@ const create = (newPerson) => axios
 
 const remove = (id) => axios
     .delete(`${personsUrl}/${id}`)
-    .then(response => undefined);
+    .then(() => undefined);
 
 const update = (id, updatedPerson) => axios
     .put(`${personsUrl}/${id}`, updatedPerson)

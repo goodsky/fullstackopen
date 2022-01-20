@@ -14,7 +14,7 @@ Content-Type: application/json
 
 ###
 
-// [FAIL] Add invalid data
+// [FAIL] Missing required fields
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
@@ -25,13 +25,24 @@ Content-Type: application/json
 
 ###
 
+// [FAIL] Invalid name and phone number
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "ABC",
+    "number": "123-456"
+}
+
+###
+
 // Update a person
 PUT http://localhost:3001/api/persons/61e793756e273a5df79346c4
 Content-Type: application/json
 
 {
     "name": "Testname McFakerson",
-    "number": "2"
+    "number": "000-0001"
 }
 
 ###
@@ -52,4 +63,4 @@ GET http://localhost:3001/api/persons/1
 ###
 
 // Delete person
-DELETE http://localhost:3001/api/persons/61e79b20ed5d61a1f38b9218
+DELETE http://localhost:3001/api/persons/61e8dcdf8813b826ee7aa598

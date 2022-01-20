@@ -8,7 +8,8 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../phonebook/ && npm run build && cp -r build ../phonebook-backend",
-    "deploy": "cp -r index.js package.json package-lock.json build ../../../fullstackopen-heroku && cd ../../../fullstackopen-heroku && git add . && git commit -m \"deploy phonebook\" && git push heroku main"
+    "deploy": "cp -r index.js package.json package-lock.json build models ../../../fullstackopen-heroku && cd ../../../fullstackopen-heroku && git add . && git commit -m \"deploy phonebook\" && git push heroku main",
+    "lint": "eslint ."
   },
   "author": "Skyler",
   "license": "MIT",
@@ -17,9 +18,11 @@
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "mongoose": "^6.1.7",
+    "mongoose-unique-validator": "^3.0.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "eslint": "^8.7.0",
     "nodemon": "^2.0.15"
   }
 }
