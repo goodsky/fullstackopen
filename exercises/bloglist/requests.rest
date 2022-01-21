@@ -1,0 +1,16 @@
+###  Get all blogs
+GET http://localhost:3003/api/blogs
+
+### Add a blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "FooBar Blog",
+    "author": "John Bazman",
+    "url": "https://foobar",
+    "likes": 0
+}
+
+### Not an endpoint
+GET http://localhost:3003/api/foobar
