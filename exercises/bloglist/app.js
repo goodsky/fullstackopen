@@ -9,6 +9,7 @@ const logger = require('./utils/logger');
 const middleware = require('./utils/middleware');
 
 const mongoDbOptions = {
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
