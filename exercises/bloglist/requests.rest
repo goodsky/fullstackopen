@@ -1,16 +1,42 @@
+### Get all users
+GET http://localhost:3003/api/users
+
+### Add a user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "test0",
+    "password": "",
+    "name": "VS Code REST Client"
+}
+
+### Login
+# @name login
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+    "username": "test0",
+    "password": ""
+}
+
 ###  Get all blogs
 GET http://localhost:3003/api/blogs
 
 ### Add a blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
 
 {
     "title": "FooBar Blog",
     "author": "John Bazman",
-    "url": "https://foobar",
-    "likes": 0
+    "url": "https://foobar"
 }
+
+### Delete a blog
+DELETE http://localhost:3003/api/blogs/61fb66a14d7c6d30100accc4
 
 ### Not an endpoint
 GET http://localhost:3003/api/foobar

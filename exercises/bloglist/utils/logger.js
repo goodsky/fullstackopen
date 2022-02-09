@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const disableTestLogs = true;
+const disableTestLogs = true; // should be true
 
 const info = (...params) => {
   if (!(disableTestLogs && process.env.NODE_ENV === 'test')) {
