@@ -11,7 +11,7 @@ beforeEach(async () => {
 });
 
 describe('when logging in', () => {
-  test('valid username and password returns token', async () => {
+  test('valid username and password returns token, name and username', async () => {
     const user = helper.initialUsers[0];
     const loginPayload = {
       username: user.username,
@@ -23,8 +23,10 @@ describe('when logging in', () => {
       .send(loginPayload)
       .expect(200);
 
-    const { token } = response.body;
+    const { token, name, username } = response.body;
     expect(helper.isValidToken(token)).toBeTruthy();
+    expect(name).toEqual(user.name);
+    expect(username).toEqual(user.username);
   });
 
   test('invalid password returns unauthorized (401)', async () => {
