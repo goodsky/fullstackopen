@@ -1,39 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import Login from './components/Login';
+import Toggleable from './components/Toggleable';
 
 import './App.css';
 
-const InfoPopUp = ({message, setMessage}) => {
+const NotificationPopUp = ({message, setMessage, isError}) => {
   useEffect(() => {
     if (message) {
       setTimeout(() => {
         setMessage(null);
       },
-      2000);
+      isError ? 5000 : 2000);
     }
-  }, [message, setMessage]);
+  }, [message, setMessage, isError]);
 
   return message ? (
-    <div className="info-popup">
-      {message}
-    </div>
-  ) : null;
-};
-
-const ErrorPopUp = ({message, setMessage}) => {
-  useEffect(() => {
-    if (message) {
-      setTimeout(() => {
-        setMessage(null);
-      },
-      5000);
-    }
-  }, [message, setMessage]);
-
-  return message ? (
-    <div className="error-popup">
+    <div className={isError ? "error-popup" : "info-popup"}>
       {message}
     </div>
   ) : null;
@@ -51,6 +35,8 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const newBlogRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -77,6 +63,7 @@ const App = () => {
     window.localStorage.removeItem('loggedInUser');
     setUser(null);
     blogService.setToken(null);
+    console.log('Logged out');
   };
 
   const handleAddBlog = async (event) => {
@@ -97,6 +84,7 @@ const App = () => {
     setNewBlogTitle('');
     setNewBlogAuthor('');
     setNewBlogUrl('');
+    newBlogRef.current.toggleVisible();
   }
 
   if (!user) {
@@ -104,7 +92,7 @@ const App = () => {
       <div>
         <h1>Blog List</h1>
         <h2>Login with your username and password</h2>
-        <ErrorPopUp message={errorMessage} setMessage={setErrorMessage} />
+        <NotificationPopUp message={errorMessage} setMessage={setErrorMessage} isError={true} />
         <Login
           username={username} setUsername={setUsername}
           password={password} setPassword={setPassword}
@@ -117,8 +105,8 @@ const App = () => {
   return (
     <div>
       <h1>Blog List</h1>
-      <InfoPopUp message={infoMessage} setMessage={setInfoMessage} />
-      <ErrorPopUp message={errorMessage} setMessage={setErrorMessage} />
+      <NotificationPopUp message={infoMessage} setMessage={setInfoMessage} isError={false}/>
+      <NotificationPopUp message={errorMessage} setMessage={setErrorMessage} isError={true} />
 
       <div>
         {user.name} is logged in
@@ -126,21 +114,23 @@ const App = () => {
       </div>
 
       <h2>Add a Blog</h2>
-      <form onSubmit={handleAddBlog}>
-        <div>
-          title:
-          <input type="text" value={newBlogTitle} onChange={(event) => setNewBlogTitle(event.target.value)} />
-        </div>
-        <div>
-          author:
-          <input type="text" value={newBlogAuthor} onChange={(event) => setNewBlogAuthor(event.target.value)} />
-        </div>
-        <div>
-          url:
-          <input type="text" value={newBlogUrl} onChange={(event) => setNewBlogUrl(event.target.value)} />
-        </div>
-        <button type="submit">Add</button>
-      </form>
+      <Toggleable buttonLabel="add new blog" ref={newBlogRef}>
+        <form onSubmit={handleAddBlog}>
+          <div>
+            title:
+            <input type="text" value={newBlogTitle} onChange={(event) => setNewBlogTitle(event.target.value)} />
+          </div>
+          <div>
+            author:
+            <input type="text" value={newBlogAuthor} onChange={(event) => setNewBlogAuthor(event.target.value)} />
+          </div>
+          <div>
+            url:
+            <input type="text" value={newBlogUrl} onChange={(event) => setNewBlogUrl(event.target.value)} />
+          </div>
+          <button type="submit">Add</button>
+        </form>
+      </Toggleable>
       
       <h2>The List</h2>
       <div>
