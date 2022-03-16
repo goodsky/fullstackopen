@@ -75,7 +75,9 @@ const App = () => {
   };
 
   const incrementLikes = async (blog) => {
-    console.log(`Increment likes on ${blog.id}`);
+    await blogService.incrementLikes(blog);
+    blog.likes += 1;
+    setBlogs(blogs.map(existingBlog => existingBlog.id === blog.id ? blog : existingBlog));
   };
 
   if (!user) {

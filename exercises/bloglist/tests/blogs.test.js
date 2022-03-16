@@ -51,6 +51,22 @@ describe('when reading the initial blogs', () => {
   });
 });
 
+describe('when reading a specific blog', () => {
+  test('blog is returned as json', async () => {
+    const allBlogs = await helper.blogsInDb();
+    const blog = allBlogs[1];
+
+    const response = await request
+      .get(`/api/blogs/${blog.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const receivedBlog = response.body;
+    expect(receivedBlog.id).toBeDefined();
+    expect(receivedBlog.user).toBeDefined();
+  });
+});
+
 describe('when posting a new blog', () => {
   test('increases the number of blogs by 1', async () => {
     const newBlog = {
@@ -183,7 +199,7 @@ describe('when posting a new blog', () => {
 describe('when updating a blog', () => {
   test('if owner, then all properties are updated', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     const updatedBlog = {
       title: 'New Title',
@@ -211,7 +227,7 @@ describe('when updating a blog', () => {
 
   test('if owner, just likes can be updated', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     const updatedLikeCount = blog.likes + 1;
     const updatedBlog = { likes: updatedLikeCount };
@@ -229,7 +245,7 @@ describe('when updating a blog', () => {
 
   test('if not owner, then returns not authorized (401)', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     const updatedBlog = {
       title: 'New Title',
@@ -250,7 +266,7 @@ describe('when updating a blog', () => {
 
   test('if no token is supplied, then returns not authorized (401)', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     const updatedBlog = {
       title: 'New Title',
@@ -267,7 +283,7 @@ describe('when updating a blog', () => {
 
   test('an empty body returns a 400 status code', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     await request
       .put(`/api/blogs/${blog.id}`)
@@ -309,7 +325,7 @@ describe('when updating a blog', () => {
 
   test('extra properties are ignored', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     const updatedLikeCount = blog.likes + 1;
     const updatedBlog = { likes: updatedLikeCount, foo: 'bar' };
@@ -330,7 +346,7 @@ describe('when updating a blog', () => {
 describe('when liking a blob', () => {
   test('the likes go up by 1', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     await request
       .post(`/api/blogs/${blog.id}/likes`)
@@ -359,7 +375,7 @@ describe('when liking a blob', () => {
 describe('when deleting an existing blog', () => {
   test('if owner, the number of blogs goes down by 1', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     await request
       .delete(`/api/blogs/${blog.id}`)
@@ -373,7 +389,7 @@ describe('when deleting an existing blog', () => {
 
   test('if owner, the blog is removed from the list', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     await request
       .delete(`/api/blogs/${blog.id}`)
@@ -387,7 +403,7 @@ describe('when deleting an existing blog', () => {
 
   test('if not owner, returns not authorized (401)', async () => {
     const allBlogs = await helper.blogsInDb();
-    const blog = allBlogs[0];
+    const blog = allBlogs[1];
 
     const users = await helper.usersInDb();
     const nonOwner = users[1]; // second user is not the owner

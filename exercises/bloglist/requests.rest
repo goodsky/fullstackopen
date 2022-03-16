@@ -6,7 +6,7 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-    "username": "test0",
+    "username": "test1",
     "password": "",
     "name": "VS Code REST Client"
 }
@@ -17,12 +17,15 @@ POST http://localhost:3003/api/login
 Content-Type: application/json
 
 {
-    "username": "test0",
+    "username": "test1",
     "password": ""
 }
 
 ###  Get all blogs
 GET http://localhost:3003/api/blogs
+
+### Get a specific blog
+GET http://localhost:3003/api/blogs/61fb654d5508d048b417816b
 
 ### Add a blog
 POST http://localhost:3003/api/blogs
@@ -30,9 +33,20 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.token}}
 
 {
-    "title": "FooBar Blog",
-    "author": "John Bazman",
-    "url": "https://foobar"
+    "title": "Using VsCode Rest Tester",
+    "author": "Huachao Mao",
+    "url": "https://marketplace.visualstudio.com/items?itemName=humao.rest-client"
+}
+
+### Update a blog
+PUT http://localhost:3003/api/blogs/62315c877057cf32a09ce2ab
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{
+    "title": "This title has been updated",
+    "author": "John Bazman II",
+    "url": "https://foobar/2"
 }
 
 ### Delete a blog

@@ -46,6 +46,19 @@ router.get('/', async (request, response) => {
   response.json(blogs);
 });
 
+router.get('/:id', async (request, response) => {
+  const { id } = request.params;
+
+  const blog = await Blog.findById(id)
+    .populate('user', {
+      username: 1, name: 1, id: 1,
+    });
+
+  logger.info('Read blog', blog.id);
+
+  response.json(blog);
+});
+
 router.post('/', async (request, response) => {
   const { body, user } = request;
 
@@ -103,7 +116,7 @@ router.put('/:id', async (request, response) => {
   // new: true means to return the newly updated object from the promise
   // runValidators: enables schema validation on update
   const updateOptions = { new: true, runValidators: true };
-  const updatedBlog = await Blog.findOneAndUpdate(id, body, updateOptions);
+  const updatedBlog = await Blog.findByIdAndUpdate(id, body, updateOptions);
 
   logger.info('updated blog', updatedBlog);
   response.status(200).json(updatedBlog);
@@ -159,6 +172,7 @@ router.post('/:id/likes', async (request, response) => {
 
   const blog = await getBlog(id);
   if (!blog) {
+    logger.info(`Blog ${id} does not exist`);
     response.status(404).send();
     return;
   }
