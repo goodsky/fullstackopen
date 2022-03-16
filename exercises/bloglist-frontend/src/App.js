@@ -74,6 +74,10 @@ const App = () => {
     console.log(`Added blog: ${newBlog.title}`);
   };
 
+  const incrementLikes = async (blog) => {
+    console.log(`Increment likes on ${blog.id}`);
+  };
+
   if (!user) {
     return (
       <div>
@@ -106,9 +110,9 @@ const App = () => {
       </Toggleable>
       
       <h2>The List</h2>
-      <div>
+      <div className="blog-container">
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} incrementLikes={() => incrementLikes(blog)} />
         )}
       </div>
     </div>
