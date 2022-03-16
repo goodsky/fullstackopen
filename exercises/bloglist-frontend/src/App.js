@@ -26,6 +26,11 @@ const NotificationPopUp = ({message, setMessage, isError}) => {
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const setBlogsOrdered = (blogs) => {
+    blogs.sort((b1, b2) => b2.likes - b1.likes);
+    setBlogs(blogs);
+  }
+
   const [infoMessage, setInfoMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -37,7 +42,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogsOrdered(blogs)
     );
   }, []);
 
@@ -66,7 +71,7 @@ const App = () => {
   const addBlog = async (newBlog) => {
     await blogService.addBlog(newBlog);
     const blogs = await blogService.getAll();
-    setBlogs(blogs);
+    setBlogsOrdered(blogs);
 
     newBlogRef.current.toggleVisible();
 
@@ -77,9 +82,8 @@ const App = () => {
   const incrementLikes = async (blog) => {
     await blogService.incrementLikes(blog);
     const updatedBlog = await blogService.getBlog(blog.id);
-    console.log("Blogs", blogs);
-    console.log("Updated Blog", updatedBlog);
-    setBlogs(blogs.map(existingBlog => existingBlog.id === updatedBlog.id ? updatedBlog : existingBlog));
+    const updatedBlogs = blogs.map(existingBlog => existingBlog.id === updatedBlog.id ? updatedBlog : existingBlog);
+    setBlogsOrdered(updatedBlogs);
   };
 
   if (!user) {
