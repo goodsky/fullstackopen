@@ -28,8 +28,13 @@ const getAll = async () => {
   return response.data;
 };
 
+const getBlog = async(blogId) => {
+  const response = await axios.get(`${baseUrl}/${blogId}`);
+  return response.data;
+}
+
 const setToken = (token) => {
   blogsToken = `Bearer ${token}`
 };
 
-export default { addBlog, incrementLikes, getAll, setToken };
+export default { addBlog, incrementLikes, getAll, getBlog, setToken };
