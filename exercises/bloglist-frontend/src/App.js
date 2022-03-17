@@ -7,7 +7,7 @@ import Toggleable from './components/Toggleable';
 
 import './App.css';
 
-const NotificationPopUp = ({message, setMessage, isError}) => {
+const NotificationPopUp = ({ message, setMessage, isError }) => {
   useEffect(() => {
     if (message) {
       setTimeout(() => {
@@ -18,7 +18,7 @@ const NotificationPopUp = ({message, setMessage, isError}) => {
   }, [message, setMessage, isError]);
 
   return message ? (
-    <div className={isError ? "error-popup" : "info-popup"}>
+    <div className={isError ? 'error-popup' : 'info-popup'}>
       {message}
     </div>
   ) : null;
@@ -29,7 +29,7 @@ const App = () => {
   const setBlogsOrdered = (blogs) => {
     blogs.sort((b1, b2) => b2.likes - b1.likes);
     setBlogs(blogs);
-  }
+  };
 
   const [infoMessage, setInfoMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -88,7 +88,7 @@ const App = () => {
 
   const deleteBlog = async (blog) => {
     if (!window.confirm(`Removing ${blog.title} by ${blog.author}`)) {
-      return
+      return;
     }
 
     await blogService.deleteBlog(blog);
@@ -108,7 +108,7 @@ const App = () => {
           setUser={setUserAndSave}
           setErrorMessage={setErrorMessage} />
       </div>
-    )
+    );
   }
 
   return (
@@ -119,14 +119,14 @@ const App = () => {
 
       <div>
         {user.name} is logged in
-        <button onClick={(event) => logoutUser()}>Logout</button>
+        <button onClick={() => logoutUser()}>Logout</button>
       </div>
 
       <h2>Add a Blog</h2>
       <Toggleable buttonLabel="add new blog" ref={newBlogRef}>
         <AddBlog addBlog={addBlog} />
       </Toggleable>
-      
+
       <h2>The List</h2>
       <div className="blog-container">
         {blogs.map(blog =>
@@ -135,6 +135,6 @@ const App = () => {
       </div>
     </div>
   );
-}
+};
 
 export default App;

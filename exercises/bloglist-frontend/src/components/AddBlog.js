@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const AddBlog = ({addBlog}) => {
+const AddBlog = ({ addBlog }) => {
   const [newBlogTitle, setNewBlogTitle] = useState('');
   const [newBlogAuthor, setNewBlogAuthor] = useState('');
   const [newBlogUrl, setNewBlogUrl] = useState('');
@@ -15,11 +15,11 @@ const AddBlog = ({addBlog}) => {
     };
 
     await addBlog(newBlog);
-    
+
     setNewBlogTitle('');
     setNewBlogAuthor('');
     setNewBlogUrl('');
-  }
+  };
 
   return (
     <form onSubmit={handleAddBlog}>

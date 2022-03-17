@@ -21,7 +21,7 @@ const Login = ({
       setPassword('');
       setErrorMessage('Could not log in!');
     }
-  }
+  };
 
   return (
     <form onSubmit={handleLogin}>
@@ -36,6 +36,6 @@ const Login = ({
       <button type="submit">Login</button>
     </form>
   );
-}
+};
 
-export default Login
+export default Login;
