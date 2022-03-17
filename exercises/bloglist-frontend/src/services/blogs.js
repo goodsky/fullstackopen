@@ -13,14 +13,14 @@ const addBlog = async (blog) => {
   await axios.post(baseUrl, blog, config);
 };
 
-const incrementLikes = async (blog) => {
+const deleteBlog = async (blog) => {
   const config = {
     headers: {
       Authorization: blogsToken,
     }
   };
 
-  await axios.post(`${baseUrl}/${blog.id}/likes`, null, config);
+  await axios.delete(`${baseUrl}/${blog.id}`, config);
 };
 
 const getAll = async () => {
@@ -33,8 +33,18 @@ const getBlog = async(blogId) => {
   return response.data;
 }
 
+const incrementLikes = async (blog) => {
+  const config = {
+    headers: {
+      Authorization: blogsToken,
+    }
+  };
+
+  await axios.post(`${baseUrl}/${blog.id}/likes`, null, config);
+};
+
 const setToken = (token) => {
   blogsToken = `Bearer ${token}`
 };
 
-export default { addBlog, incrementLikes, getAll, getBlog, setToken };
+export default { addBlog, deleteBlog, getAll, getBlog, incrementLikes, setToken };

@@ -2,7 +2,7 @@ import './Blog.css';
 
 import { useState } from 'react';
 
-const Blog = ({blog, incrementLikes}) => {
+const Blog = ({blog, incrementLikes, deleteBlog}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleIsExpanded = () => {
@@ -12,8 +12,10 @@ const Blog = ({blog, incrementLikes}) => {
   const blogDetails = (
     <div>
       <i>by {blog.author}</i><br/>
+      submitted by {blog.user.username}<br/>
       <a href={blog.url} target="_blank" rel="noreferrer noopener">{blog.url}</a><br/>
       likes {blog.likes} <button onClick={incrementLikes}>like</button><br/>
+      <button className="blog-deletebutton" onClick={deleteBlog}>delete</button><br/>
     </div>
   );
 

@@ -86,6 +86,16 @@ const App = () => {
     setBlogsOrdered(updatedBlogs);
   };
 
+  const deleteBlog = async (blog) => {
+    if (!window.confirm(`Removing ${blog.title} by ${blog.author}`)) {
+      return
+    }
+
+    await blogService.deleteBlog(blog);
+    const updatedBlogs = blogs.filter(existingBlog => existingBlog.id !== blog.id);
+    setBlogsOrdered(updatedBlogs);
+  };
+
   if (!user) {
     return (
       <div>
@@ -120,7 +130,7 @@ const App = () => {
       <h2>The List</h2>
       <div className="blog-container">
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} incrementLikes={() => incrementLikes(blog)} />
+          <Blog key={blog.id} blog={blog} incrementLikes={() => incrementLikes(blog)} deleteBlog={() => deleteBlog(blog)} />
         )}
       </div>
     </div>
