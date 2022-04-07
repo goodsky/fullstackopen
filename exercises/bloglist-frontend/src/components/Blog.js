@@ -14,7 +14,7 @@ const Blog = ({ blog, incrementLikes, deleteBlog }) => {
       <i>by {blog.author}</i><br/>
       submitted by {blog.user.username}<br/>
       <a href={blog.url} target="_blank" rel="noreferrer noopener">{blog.url}</a><br/>
-      likes {blog.likes} <button onClick={incrementLikes}>like</button><br/>
+      <span>likes {blog.likes}</span><button onClick={incrementLikes}>like</button><br/>
       <button className="blog-deletebutton" onClick={deleteBlog}>delete</button><br/>
     </div>
   );
