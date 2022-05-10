@@ -28,7 +28,7 @@ router.post('/', async (request, response) => {
   logger.info('Successful log in attempt for user', username);
 
   const token = jwt.sign(payload, config.JWT_SECRET);
-  response.status(200).json({ ...payload, token});
+  response.status(200).json({ ...payload, token });
 });
 
 module.exports = router;

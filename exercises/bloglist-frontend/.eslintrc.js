@@ -52,5 +52,8 @@ module.exports = {
     "react": {
       "version": "detect"
     }
+  },
+  "globals": {
+    "cy": true
   }
 }
