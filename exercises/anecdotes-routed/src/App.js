@@ -42,16 +42,16 @@ const App = () => {
     setTimeout(() => setNotification(''), 5000)
   }
 
-  const vote = (id) => {
-    const anecdote = anecdoteById(id)
+  // const vote = (id) => {
+  //   const anecdote = anecdoteById(id)
 
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    }
+  //   const voted = {
+  //     ...anecdote,
+  //     votes: anecdote.votes + 1
+  //   }
 
-    setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
-  }
+  //   setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
+  // }
 
   const match = useMatch("/anecdote/:id");
   const anecdote = match ? anecdoteById(Number(match.params.id)) : null;
