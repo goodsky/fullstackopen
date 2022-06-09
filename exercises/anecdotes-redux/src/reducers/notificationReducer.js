@@ -2,36 +2,34 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const notificationSlice = createSlice({
   name: 'notification',
-  initialState: null,
+  initialState: { timerId: null },
   reducers: {
     setMessage(state, action) {
-      return action.payload
+      state.message = action.payload
     },
     clearMessage(state, action) {
-      return null
+      state.message = null
+      state.timerId = null
+    },
+    setTimerId(state, action) {
+      state.timerId = action.payload
     }
   }
 })
 
-export const { setMessage, clearMessage } = notificationSlice.actions
+const { setMessage, clearMessage, setTimerId } = notificationSlice.actions
 
 export const setNotification = (message, secondsToDisplay) => {
-  const myId = Math.floor(Math.random() * 1000000)
   return async (dispatch, getState) => {
-    console.log('displaying notification', myId)
-    dispatch(setMessage({ message, id: myId }))
-    setTimeout(() => {
-      const { id } = getState().notification
-      
-      // only clear the message if its the one we put up
-      if (id === myId) {
-        console.log('clearing notification', myId)
-        dispatch(clearMessage())
-      }
-      else {
-        console.log('not clearning notification', myId, '. Current id', id)
-      }
-    }, secondsToDisplay * 1000)
+    const oldTimerId = getState().notification.timerId
+    if (oldTimerId !== null) {
+      console.log('Clearing timeout', oldTimerId)
+      clearTimeout(oldTimerId)
+    }
+    
+    dispatch(setMessage(message))
+    const newTimerId = setTimeout(() => dispatch(clearMessage()), secondsToDisplay * 1000)
+    dispatch(setTimerId(newTimerId))
   }
 }
 
