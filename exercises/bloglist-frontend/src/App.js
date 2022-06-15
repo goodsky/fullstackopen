@@ -10,17 +10,17 @@ import './App.css';
 const NotificationPopUp = ({ message, setMessage, isError }) => {
   useEffect(() => {
     if (message) {
-      setTimeout(() => {
-        setMessage(null);
-      },
-      isError ? 5000 : 2000);
+      setTimeout(
+        () => {
+          setMessage(null);
+        },
+        isError ? 5000 : 2000
+      );
     }
   }, [message, setMessage, isError]);
 
   return message ? (
-    <div className={isError ? 'error-popup' : 'info-popup'}>
-      {message}
-    </div>
+    <div className={isError ? 'error-popup' : 'info-popup'}>{message}</div>
   ) : null;
 };
 
@@ -41,9 +41,7 @@ const App = () => {
   const newBlogRef = useRef();
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogsOrdered(blogs)
-    );
+    blogService.getAll().then((blogs) => setBlogsOrdered(blogs));
   }, []);
 
   useEffect(() => {
@@ -82,7 +80,9 @@ const App = () => {
   const incrementLikes = async (blog) => {
     await blogService.incrementLikes(blog);
     const updatedBlog = await blogService.getBlog(blog.id);
-    const updatedBlogs = blogs.map(existingBlog => existingBlog.id === updatedBlog.id ? updatedBlog : existingBlog);
+    const updatedBlogs = blogs.map((existingBlog) =>
+      existingBlog.id === updatedBlog.id ? updatedBlog : existingBlog
+    );
     setBlogsOrdered(updatedBlogs);
   };
 
@@ -92,7 +92,9 @@ const App = () => {
     }
 
     await blogService.deleteBlog(blog);
-    const updatedBlogs = blogs.filter(existingBlog => existingBlog.id !== blog.id);
+    const updatedBlogs = blogs.filter(
+      (existingBlog) => existingBlog.id !== blog.id
+    );
     setBlogsOrdered(updatedBlogs);
   };
 
@@ -101,12 +103,19 @@ const App = () => {
       <div>
         <h1>Blog List</h1>
         <h2>Login with your username and password</h2>
-        <NotificationPopUp message={errorMessage} setMessage={setErrorMessage} isError={true} />
+        <NotificationPopUp
+          message={errorMessage}
+          setMessage={setErrorMessage}
+          isError={true}
+        />
         <Login
-          username={username} setUsername={setUsername}
-          password={password} setPassword={setPassword}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
           setUser={setUserAndSave}
-          setErrorMessage={setErrorMessage} />
+          setErrorMessage={setErrorMessage}
+        />
       </div>
     );
   }
@@ -114,8 +123,16 @@ const App = () => {
   return (
     <div>
       <h1>Blog List</h1>
-      <NotificationPopUp message={infoMessage} setMessage={setInfoMessage} isError={false}/>
-      <NotificationPopUp message={errorMessage} setMessage={setErrorMessage} isError={true} />
+      <NotificationPopUp
+        message={infoMessage}
+        setMessage={setInfoMessage}
+        isError={false}
+      />
+      <NotificationPopUp
+        message={errorMessage}
+        setMessage={setErrorMessage}
+        isError={true}
+      />
 
       <div>
         {user.name} is logged in
@@ -129,9 +146,14 @@ const App = () => {
 
       <h2>The List</h2>
       <div className="blog-container">
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} incrementLikes={() => incrementLikes(blog)} deleteBlog={() => deleteBlog(blog)} />
-        )}
+        {blogs.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            incrementLikes={() => incrementLikes(blog)}
+            deleteBlog={() => deleteBlog(blog)}
+          />
+        ))}
       </div>
     </div>
   );

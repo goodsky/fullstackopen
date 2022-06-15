@@ -12,3 +12,4 @@ https://fullstackopen.com/en/
 ## Tools used
 * [Web Sequence Diagrams](https://www.websequencediagrams.com/)
 * [create-react-app](https://github.com/facebook/create-react-app)
+* [fullstack-hy2020 app template](https://github.com/fullstack-hy2020/create-app)
