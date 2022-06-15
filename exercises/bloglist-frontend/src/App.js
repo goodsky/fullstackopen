@@ -1,139 +1,116 @@
-import { useEffect, useRef, useState } from 'react';
-import AddBlog from './components/AddBlog';
-import Blog from './components/Blog';
-import blogService from './services/blogs';
-import Login from './components/Login';
-import Toggleable from './components/Toggleable';
+import { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import AddBlog from './components/AddBlog'
+import Blog from './components/Blog'
+import blogService from './services/blogs'
+import Login from './components/Login'
+import Notification from './components/Notification'
+import Toggleable from './components/Toggleable'
 
-import './App.css';
+import { setNotification } from './reducers/notification'
 
-const NotificationPopUp = ({ message, setMessage, isError }) => {
-  useEffect(() => {
-    if (message) {
-      setTimeout(
-        () => {
-          setMessage(null);
-        },
-        isError ? 5000 : 2000
-      );
-    }
-  }, [message, setMessage, isError]);
-
-  return message ? (
-    <div className={isError ? 'error-popup' : 'info-popup'}>{message}</div>
-  ) : null;
-};
+import './App.css'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const dispatch = useDispatch()
+
+  const [blogs, setBlogs] = useState([])
   const setBlogsOrdered = (blogs) => {
-    blogs.sort((b1, b2) => b2.likes - b1.likes);
-    setBlogs(blogs);
-  };
+    blogs.sort((b1, b2) => b2.likes - b1.likes)
+    setBlogs(blogs)
+  }
 
-  const [infoMessage, setInfoMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [user, setUser] = useState(null)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-  const [user, setUser] = useState(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const newBlogRef = useRef();
+  const newBlogRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogsOrdered(blogs));
-  }, []);
+    blogService.getAll().then((blogs) => setBlogsOrdered(blogs))
+  }, [])
 
   useEffect(() => {
-    const loggedInUserJSON = window.localStorage.getItem('loggedInUser');
+    const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
     if (loggedInUserJSON) {
-      const user = JSON.parse(loggedInUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const user = JSON.parse(loggedInUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   const setUserAndSave = (user) => {
-    window.localStorage.setItem('loggedInUser', JSON.stringify(user));
-    setUser(user);
-    blogService.setToken(user.token);
-  };
+    window.localStorage.setItem('loggedInUser', JSON.stringify(user))
+    setUser(user)
+    blogService.setToken(user.token)
+  }
 
   const logoutUser = () => {
-    window.localStorage.removeItem('loggedInUser');
-    setUser(null);
-    blogService.setToken(null);
-    console.log('Logged out');
-  };
+    window.localStorage.removeItem('loggedInUser')
+    setUser(null)
+    blogService.setToken(null)
+    console.log('Logged out')
+  }
 
   const addBlog = async (newBlog) => {
-    await blogService.addBlog(newBlog);
-    const blogs = await blogService.getAll();
-    setBlogsOrdered(blogs);
+    await blogService.addBlog(newBlog)
+    const blogs = await blogService.getAll()
+    setBlogsOrdered(blogs)
 
-    newBlogRef.current.toggleVisible();
+    newBlogRef.current.toggleVisible()
 
-    setInfoMessage(`${newBlog.title} added!`);
-    console.log(`Added blog: ${newBlog.title}`);
-  };
+    dispatch(setNotification(`${newBlog.title} added!`))
+    console.log(`Added blog: ${newBlog.title}`)
+  }
 
   const incrementLikes = async (blog) => {
-    await blogService.incrementLikes(blog);
-    const updatedBlog = await blogService.getBlog(blog.id);
+    await blogService.incrementLikes(blog)
+    const updatedBlog = await blogService.getBlog(blog.id)
     const updatedBlogs = blogs.map((existingBlog) =>
       existingBlog.id === updatedBlog.id ? updatedBlog : existingBlog
-    );
-    setBlogsOrdered(updatedBlogs);
-  };
+    )
+
+    dispatch(setNotification(`You voted for '${updatedBlog.title}'!`))
+
+    setBlogsOrdered(updatedBlogs)
+  }
 
   const deleteBlog = async (blog) => {
     if (!window.confirm(`Removing ${blog.title} by ${blog.author}`)) {
-      return;
+      return
     }
 
-    await blogService.deleteBlog(blog);
+    await blogService.deleteBlog(blog)
     const updatedBlogs = blogs.filter(
       (existingBlog) => existingBlog.id !== blog.id
-    );
-    setBlogsOrdered(updatedBlogs);
-  };
+    )
+
+    dispatch(setNotification(`You deleted '${blog.title}'!`))
+
+    setBlogsOrdered(updatedBlogs)
+  }
 
   if (!user) {
     return (
       <div>
         <h1>Blog List</h1>
         <h2>Login with your username and password</h2>
-        <NotificationPopUp
-          message={errorMessage}
-          setMessage={setErrorMessage}
-          isError={true}
-        />
+        <Notification />
         <Login
           username={username}
           setUsername={setUsername}
           password={password}
           setPassword={setPassword}
           setUser={setUserAndSave}
-          setErrorMessage={setErrorMessage}
         />
       </div>
-    );
+    )
   }
 
   return (
     <div>
       <h1>Blog List</h1>
-      <NotificationPopUp
-        message={infoMessage}
-        setMessage={setInfoMessage}
-        isError={false}
-      />
-      <NotificationPopUp
-        message={errorMessage}
-        setMessage={setErrorMessage}
-        isError={true}
-      />
-
+      <Notification />
       <div>
         {user.name} is logged in
         <button onClick={() => logoutUser()}>Logout</button>
@@ -156,7 +133,7 @@ const App = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

@@ -1,50 +1,57 @@
-import axios from 'axios';
-const baseUrl = '/api/blogs';
+import axios from 'axios'
+const baseUrl = '/api/blogs'
 
-let blogsToken = null;
+let blogsToken = null
 
 const addBlog = async (blog) => {
   const config = {
     headers: {
       Authorization: blogsToken,
-    }
-  };
+    },
+  }
 
-  await axios.post(baseUrl, blog, config);
-};
+  await axios.post(baseUrl, blog, config)
+}
 
 const deleteBlog = async (blog) => {
   const config = {
     headers: {
       Authorization: blogsToken,
-    }
-  };
+    },
+  }
 
-  await axios.delete(`${baseUrl}/${blog.id}`, config);
-};
+  await axios.delete(`${baseUrl}/${blog.id}`, config)
+}
 
 const getAll = async () => {
-  const response = await axios.get(baseUrl);
-  return response.data;
-};
+  const response = await axios.get(baseUrl)
+  return response.data
+}
 
-const getBlog = async(blogId) => {
-  const response = await axios.get(`${baseUrl}/${blogId}`);
-  return response.data;
-};
+const getBlog = async (blogId) => {
+  const response = await axios.get(`${baseUrl}/${blogId}`)
+  return response.data
+}
 
 const incrementLikes = async (blog) => {
   const config = {
     headers: {
       Authorization: blogsToken,
-    }
-  };
+    },
+  }
 
-  await axios.post(`${baseUrl}/${blog.id}/likes`, null, config);
-};
+  await axios.post(`${baseUrl}/${blog.id}/likes`, null, config)
+}
 
 const setToken = (token) => {
-  blogsToken = `Bearer ${token}`;
-};
+  blogsToken = `Bearer ${token}`
+}
 
-export default { addBlog, deleteBlog, getAll, getBlog, incrementLikes, setToken };
+export default {
+  addBlog,
+  deleteBlog,
+  getAll,
+  getBlog,
+  incrementLikes,
+  setToken,
+}

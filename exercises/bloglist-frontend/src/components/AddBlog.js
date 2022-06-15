@@ -1,43 +1,58 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
 const AddBlog = ({ addBlog }) => {
-  const [newBlogTitle, setNewBlogTitle] = useState('');
-  const [newBlogAuthor, setNewBlogAuthor] = useState('');
-  const [newBlogUrl, setNewBlogUrl] = useState('');
+  const [newBlogTitle, setNewBlogTitle] = useState('')
+  const [newBlogAuthor, setNewBlogAuthor] = useState('')
+  const [newBlogUrl, setNewBlogUrl] = useState('')
 
   const handleAddBlog = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     const newBlog = {
       title: newBlogTitle,
       author: newBlogAuthor,
       url: newBlogUrl,
-    };
+    }
 
-    await addBlog(newBlog);
+    await addBlog(newBlog)
 
-    setNewBlogTitle('');
-    setNewBlogAuthor('');
-    setNewBlogUrl('');
-  };
+    setNewBlogTitle('')
+    setNewBlogAuthor('')
+    setNewBlogUrl('')
+  }
 
   return (
     <form onSubmit={handleAddBlog}>
       <div>
         title:
-        <input type="text" id="add-blog-title" value={newBlogTitle} onChange={(event) => setNewBlogTitle(event.target.value)} />
+        <input
+          type="text"
+          id="add-blog-title"
+          value={newBlogTitle}
+          onChange={(event) => setNewBlogTitle(event.target.value)}
+        />
       </div>
       <div>
         author:
-        <input type="text" id="add-blog-author" value={newBlogAuthor} onChange={(event) => setNewBlogAuthor(event.target.value)} />
+        <input
+          type="text"
+          id="add-blog-author"
+          value={newBlogAuthor}
+          onChange={(event) => setNewBlogAuthor(event.target.value)}
+        />
       </div>
       <div>
         url:
-        <input type="text" id="add-blog-url" value={newBlogUrl} onChange={(event) => setNewBlogUrl(event.target.value)} />
+        <input
+          type="text"
+          id="add-blog-url"
+          value={newBlogUrl}
+          onChange={(event) => setNewBlogUrl(event.target.value)}
+        />
       </div>
       <button type="submit">Add</button>
     </form>
-  );
-};
+  )
+}
 
-export default AddBlog;
+export default AddBlog

@@ -1,20 +1,20 @@
-import { forwardRef, useImperativeHandle, useState } from 'react';
-import PropTypes from 'prop-types';
+import { forwardRef, useImperativeHandle, useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Toggleable = forwardRef((props, ref) => {
-  const { buttonLabel, children } = props;
-  const [isVisible, setIsVisible] = useState(false);
+  const { buttonLabel, children } = props
+  const [isVisible, setIsVisible] = useState(false)
 
-  const showWhenVisible = { display: isVisible ? '' : 'none' };
-  const hideWhenVisible = { display: isVisible ? 'none' : '' };
+  const showWhenVisible = { display: isVisible ? '' : 'none' }
+  const hideWhenVisible = { display: isVisible ? 'none' : '' }
 
   // This imperitive handle allows parent components to toggle visibility via a ref.
   // This is not the only way to do this and probably not the best.
   useImperativeHandle(ref, () => {
     return {
       toggleVisible: () => setIsVisible(!isVisible),
-    };
-  });
+    }
+  })
 
   return (
     <>
@@ -26,13 +26,13 @@ const Toggleable = forwardRef((props, ref) => {
         <button onClick={() => setIsVisible(false)}>Cancel</button>
       </div>
     </>
-  );
-});
+  )
+})
 
-Toggleable.displayName = 'Toggleable';
+Toggleable.displayName = 'Toggleable'
 
 Toggleable.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
-};
+}
 
-export default Toggleable;
+export default Toggleable
