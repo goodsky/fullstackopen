@@ -1,8 +1,13 @@
 import './Blog.css'
 
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, incrementLikes, deleteBlog }) => {
+import { incrementLikes, deleteBlog } from '../reducers/blogs'
+
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
+
   const [isExpanded, setIsExpanded] = useState(false)
 
   const toggleIsExpanded = () => {
@@ -20,9 +25,12 @@ const Blog = ({ blog, incrementLikes, deleteBlog }) => {
       </a>
       <br />
       <span>likes {blog.likes}</span>
-      <button onClick={incrementLikes}>like</button>
+      <button onClick={() => dispatch(incrementLikes(blog))}>like</button>
       <br />
-      <button className="blog-deletebutton" onClick={deleteBlog}>
+      <button
+        className="blog-deletebutton"
+        onClick={() => dispatch(deleteBlog(blog))}
+      >
         delete
       </button>
       <br />

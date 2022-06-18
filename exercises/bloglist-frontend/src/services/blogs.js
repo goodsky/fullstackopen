@@ -10,7 +10,8 @@ const addBlog = async (blog) => {
     },
   }
 
-  await axios.post(baseUrl, blog, config)
+  const response = await axios.post(baseUrl, blog, config)
+  return response.data
 }
 
 const deleteBlog = async (blog) => {

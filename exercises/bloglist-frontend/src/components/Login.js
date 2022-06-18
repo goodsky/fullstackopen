@@ -1,21 +1,23 @@
 import loginService from '../services/login'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUser, setUsername, setPassword } from '../reducers/login'
 import { setNotification } from '../reducers/notification'
 
-const Login = ({ username, setUsername, password, setPassword, setUser }) => {
+const Login = () => {
   const dispatch = useDispatch()
+  const { username, password } = useSelector((state) => state.login)
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.getUser(username, password)
       console.log('Logged in as', user.username)
-      setUser(user)
-      setUsername('')
-      setPassword('')
+      dispatch(loginUser(user))
+      dispatch(setUsername(''))
+      dispatch(setPassword(''))
     } catch (error) {
       console.error('Failed to log in', error)
-      setPassword('')
+      dispatch(setPassword(''))
       dispatch(setNotification('Could not log in!', true))
     }
   }
@@ -27,7 +29,7 @@ const Login = ({ username, setUsername, password, setPassword, setUser }) => {
         <input
           type="text"
           value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          onChange={(event) => dispatch(setUsername(event.target.value))}
         />
       </div>
       <div>
@@ -35,7 +37,7 @@ const Login = ({ username, setUsername, password, setPassword, setUser }) => {
         <input
           type="password"
           value={password}
-          onChange={(event) => setPassword(event.target.value)}
+          onChange={(event) => dispatch(setPassword(event.target.value))}
         />
       </div>
       <button type="submit">Login</button>

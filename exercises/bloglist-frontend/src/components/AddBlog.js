@@ -1,11 +1,15 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addBlog } from '../reducers/blogs'
 
-const AddBlog = ({ addBlog }) => {
+const AddBlog = ({ parentRef }) => {
+  const dispatch = useDispatch()
+
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
 
-  const handleAddBlog = async (event) => {
+  const handleAddBlog = (event) => {
     event.preventDefault()
 
     const newBlog = {
@@ -14,8 +18,9 @@ const AddBlog = ({ addBlog }) => {
       url: newBlogUrl,
     }
 
-    await addBlog(newBlog)
+    dispatch(addBlog(newBlog))
 
+    parentRef.current.toggleVisible()
     setNewBlogTitle('')
     setNewBlogAuthor('')
     setNewBlogUrl('')
