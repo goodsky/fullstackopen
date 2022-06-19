@@ -12,10 +12,16 @@ const blogsSlice = createSlice({
       blogs.sort((b1, b2) => b2.likes - b1.likes)
       return blogs
     },
+    updateBlog: (state, action) => {
+      const updatedBlog = action.payload
+      return state.map((blog) =>
+        blog.id === updatedBlog.id ? updatedBlog : blog
+      )
+    },
   },
 })
 
-const { setBlogs } = blogsSlice.actions
+const { setBlogs, updateBlog } = blogsSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -40,17 +46,24 @@ export const addBlog = (newBlog) => {
 }
 
 export const incrementLikes = (blog) => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     await blogService.incrementLikes(blog)
     const updatedBlog = await blogService.getBlog(blog.id)
 
-    const { blogs } = getState()
-    const updatedBlogs = blogs.map((existingBlog) =>
-      existingBlog.id === updatedBlog.id ? updatedBlog : existingBlog
-    )
     dispatch(setNotification(`You voted for '${updatedBlog.title}'!`))
-    dispatch(setBlogs(updatedBlogs))
+    dispatch(updateBlog(updatedBlog))
     console.log(`Voted for blog: ${updatedBlog.title}`)
+  }
+}
+
+export const addComment = (blog, comment) => {
+  return async (dispatch) => {
+    await blogService.addComment(blog, comment)
+    const updatedBlog = await blogService.getBlog(blog.id)
+
+    dispatch(setNotification(`You commented on '${updatedBlog.title}'!`))
+    dispatch(updateBlog(updatedBlog))
+    console.log(`Added comment: ${comment}`)
   }
 }
 

@@ -44,6 +44,20 @@ const incrementLikes = async (blog) => {
   await axios.post(`${baseUrl}/${blog.id}/likes`, null, config)
 }
 
+const addComment = async (blog, comment) => {
+  const config = {
+    headers: {
+      Authorization: blogsToken,
+    },
+  }
+
+  const requestBody = {
+    comment: comment,
+  }
+
+  await axios.post(`${baseUrl}/${blog.id}/comments`, requestBody, config)
+}
+
 const setToken = (token) => {
   blogsToken = `Bearer ${token}`
 }
@@ -54,5 +68,6 @@ export default {
   getAll,
   getBlog,
   incrementLikes,
+  addComment,
   setToken,
 }

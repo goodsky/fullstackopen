@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import BlogDetails from './components/BlogDetails'
 import BlogList from './components/BlogList'
 import Login from './components/Login'
+import NavBar from './components/NavBar'
+import NotFound from './components/NotFound'
 import Notification from './components/Notification'
 import UserDetails from './components/UserDetails'
 import Users from './components/Users'
 
 import { initializeBlogs } from './reducers/blogs'
-import { checkForLoggedInUser, logoutUser } from './reducers/login'
+import { checkForLoggedInUser } from './reducers/login'
 import './App.css'
 
 const App = () => {
@@ -34,14 +36,11 @@ const App = () => {
 
   return (
     <div>
+      <NavBar />
       <h1>Blog List</h1>
       <Notification />
-      <div>
-        &apos;{loggedInUser.name}&apos; is logged in
-        <button onClick={() => dispatch(logoutUser())}>Logout</button>
-      </div>
-
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<BlogList blogs={blogs} />} />
         <Route path="/blogs/:id" element={<BlogDetails />} />
         <Route path="/users" element={<Users />} />
