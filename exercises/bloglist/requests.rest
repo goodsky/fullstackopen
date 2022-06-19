@@ -52,5 +52,16 @@ Authorization: Bearer {{login.response.body.token}}
 ### Delete a blog
 DELETE http://localhost:3003/api/blogs/61fb66a14d7c6d30100accc4
 
+### Like a blog
+POST http://localhost:3003/api/blogs/61fb654d5508d048b417816b/likes
+
+### Comment on a blog
+POST http://localhost:3003/api/blogs/61fb654d5508d048b417816b/comments
+Content-Type: application/json
+
+{
+    "comment": "I saw this from VS Code!"
+}
+
 ### Not an endpoint
 GET http://localhost:3003/api/foobar

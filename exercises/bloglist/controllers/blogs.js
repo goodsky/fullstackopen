@@ -29,17 +29,23 @@ const getBlogAndVerifyUserIsOwner = async (blogId, user) => {
 
   if (blog && blog.user.toString() === user.userId.toString()) {
     userIsOwner = true;
-    logger.info('checking if user is owner', blog.user.toString(), user.userId.toString(), userIsOwner);
+    logger.info(
+      'checking if user is owner',
+      blog.user.toString(),
+      user.userId.toString(),
+      userIsOwner,
+    );
   }
 
   return { blog, userIsOwner };
 };
 
 router.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
-    .populate('user', {
-      username: 1, name: 1, id: 1,
-    });
+  const blogs = await Blog.find({}).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1,
+  });
 
   logger.info('Read blogs', blogs.length);
 
@@ -49,10 +55,11 @@ router.get('/', async (request, response) => {
 router.get('/:id', async (request, response) => {
   const { id } = request.params;
 
-  const blog = await Blog.findById(id)
-    .populate('user', {
-      username: 1, name: 1, id: 1,
-    });
+  const blog = await Blog.findById(id).populate('user', {
+    username: 1,
+    name: 1,
+    id: 1,
+  });
 
   logger.info('Read blog', blog.id);
 
@@ -178,6 +185,31 @@ router.post('/:id/likes', async (request, response) => {
   }
 
   blog.likes += 1;
+  await blog.save();
+
+  response.status(204).send();
+});
+
+router.post('/:id/comments', async (request, response) => {
+  const { id } = request.params;
+  const { comment } = request.body;
+
+  const blog = await getBlog(id);
+  if (!blog) {
+    logger.info(`Blog ${id} does not exist`);
+    response.status(404).send();
+    return;
+  }
+
+  if (!comment) {
+    logger.info('Ignoring empty comment.');
+    response.status(400).send();
+    return;
+  }
+
+  blog.comments.push({
+    comment,
+  });
   await blog.save();
 
   response.status(204).send();

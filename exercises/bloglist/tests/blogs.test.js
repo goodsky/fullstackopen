@@ -104,6 +104,7 @@ describe('when posting a new blog', () => {
       likes: blog.likes,
       id: blog.id,
       user: blog.user.id,
+      comments: blog.comments,
     }));
     expect(blogs).toContainEqual(newBlogObject);
   });
@@ -197,6 +198,7 @@ describe('when updating a blog', () => {
       author: 'New Author',
       url: 'New Url',
       likes: 1337,
+      comments: [],
     };
 
     const updatedBlogResponse = await request
@@ -335,7 +337,7 @@ describe('when updating a blog', () => {
   });
 });
 
-describe('when liking a blob', () => {
+describe('when liking a blog', () => {
   test('the likes go up by 1', async () => {
     const allBlogs = await helper.blogsInDb();
     const blog = allBlogs[1];
@@ -414,6 +416,64 @@ describe('when deleting an existing blog', () => {
       .delete('/api/blogs/0')
       .set('Authorization', await helper.authHeaderForUser())
       .expect(404);
+  });
+});
+
+describe('when commenting on a blog', () => {
+  test('comment is added to the blog', async () => {
+    const allBlogs = await helper.blogsInDb();
+    const blog = allBlogs[1];
+
+    const requestBody = {
+      comment: `This is my new comment. rnd#${Math.random()}`,
+    };
+
+    await request
+      .post(`/api/blogs/${blog.id}/comments`)
+      .send(requestBody)
+      .expect(204);
+
+    const response = await request
+      .get(`/api/blogs/${blog.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const blogWithComment = response.body;
+    const commentsMinusIds = blogWithComment.comments.map((x) => ({
+      comment: x.comment,
+    }));
+    expect(commentsMinusIds).toContainEqual(requestBody);
+  });
+
+  test('empty comment returns 400', async () => {
+    const allBlogs = await helper.blogsInDb();
+    const blog = allBlogs[1];
+
+    const requestBody = {
+      comment: '',
+    };
+
+    await request
+      .post(`/api/blogs/${blog.id}/comments`)
+      .send(requestBody)
+      .expect(400);
+  });
+
+  test('non-existant blog returns 404', async () => {
+    const missingId = await helper.nonExistingId();
+
+    const requestBody = {
+      comment: `This is my new comment. rnd#${Math.random()}`,
+    };
+
+    await request
+      .post(`/api/blogs/${missingId}/comments`)
+      .send(requestBody)
+      .expect(404);
+  });
+
+  test('an invalid id returns a 404 status code', async () => {
+    await request.post('/api/blogs/0/comments').expect(404);
   });
 });
 
