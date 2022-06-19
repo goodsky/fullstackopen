@@ -108,7 +108,7 @@ describe('most blogs', () => {
   test('single blog, returns that author', () => {
     const blogs = [
       {
-        title: 'A Cherry Picker\'s Guide to Doctor Who',
+        title: "A Cherry Picker's Guide to Doctor Who",
         author: 'Martin Fowler',
         url: 'https://martinfowler.com/articles/doctor-who.html',
         likes: 7,
@@ -122,13 +122,14 @@ describe('most blogs', () => {
   test('multiple blogs, returns author with most blogs', () => {
     const blogs = [
       {
-        title: 'A Cherry Picker\'s Guide to Doctor Who',
+        title: "A Cherry Picker's Guide to Doctor Who",
         author: 'Martin Fowler',
         url: 'https://martinfowler.com/articles/doctor-who.html',
         likes: 7,
       },
       {
-        title: 'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
+        title:
+          'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
         author: 'Scott Hanselman',
         url: 'https://www.hanselman.com/blog/javascript-and-typescript-projects-with-react-angular-or-vue-in-visual-studio-2022-with-or-without-net',
         likes: 3,
@@ -152,7 +153,8 @@ describe('most blogs', () => {
         likes: 13,
       },
       {
-        title: 'The MainWindowHandle property is just a guess based on heuristics',
+        title:
+          'The MainWindowHandle property is just a guess based on heuristics',
         author: 'Raymond Chen',
         url: 'https://devblogs.microsoft.com/oldnewthing/20220124-00/?p=106192',
         likes: 1,
@@ -166,13 +168,14 @@ describe('most blogs', () => {
   test('multiple blogs with tie, returns any author with most blogs', () => {
     const blogs = [
       {
-        title: 'A Cherry Picker\'s Guide to Doctor Who',
+        title: "A Cherry Picker's Guide to Doctor Who",
         author: 'Martin Fowler',
         url: 'https://martinfowler.com/articles/doctor-who.html',
         likes: 7,
       },
       {
-        title: 'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
+        title:
+          'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
         author: 'Scott Hanselman',
         url: 'https://www.hanselman.com/blog/javascript-and-typescript-projects-with-react-angular-or-vue-in-visual-studio-2022-with-or-without-net',
         likes: 3,
@@ -190,7 +193,8 @@ describe('most blogs', () => {
         likes: 13,
       },
       {
-        title: 'The MainWindowHandle property is just a guess based on heuristics',
+        title:
+          'The MainWindowHandle property is just a guess based on heuristics',
         author: 'Raymond Chen',
         url: 'https://devblogs.microsoft.com/oldnewthing/20220124-00/?p=106192',
         likes: 1,
@@ -212,10 +216,10 @@ describe('most likes', () => {
     expect(result).toBe(null);
   });
 
-  test('single blog, returns that author\'s likes', () => {
+  test("single blog, returns that author's likes", () => {
     const blogs = [
       {
-        title: 'A Cherry Picker\'s Guide to Doctor Who',
+        title: "A Cherry Picker's Guide to Doctor Who",
         author: 'Martin Fowler',
         url: 'https://martinfowler.com/articles/doctor-who.html',
         likes: 7,
@@ -229,13 +233,14 @@ describe('most likes', () => {
   test('multiple blogs, returns author with most likes', () => {
     const blogs = [
       {
-        title: 'A Cherry Picker\'s Guide to Doctor Who',
+        title: "A Cherry Picker's Guide to Doctor Who",
         author: 'Martin Fowler',
         url: 'https://martinfowler.com/articles/doctor-who.html',
         likes: 7,
       },
       {
-        title: 'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
+        title:
+          'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
         author: 'Scott Hanselman',
         url: 'https://www.hanselman.com/blog/javascript-and-typescript-projects-with-react-angular-or-vue-in-visual-studio-2022-with-or-without-net',
         likes: 3,
@@ -259,7 +264,8 @@ describe('most likes', () => {
         likes: 13,
       },
       {
-        title: 'The MainWindowHandle property is just a guess based on heuristics',
+        title:
+          'The MainWindowHandle property is just a guess based on heuristics',
         author: 'Raymond Chen',
         url: 'https://devblogs.microsoft.com/oldnewthing/20220124-00/?p=106192',
         likes: 1,
@@ -273,13 +279,14 @@ describe('most likes', () => {
   test('multiple blogs with tie, returns any author with most likes', () => {
     const blogs = [
       {
-        title: 'A Cherry Picker\'s Guide to Doctor Who',
+        title: "A Cherry Picker's Guide to Doctor Who",
         author: 'Martin Fowler',
         url: 'https://martinfowler.com/articles/doctor-who.html',
         likes: 7,
       },
       {
-        title: 'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
+        title:
+          'JavaScript and TypeScript Projects with React, Angular, or Vue in Visual Studio 2022 with or without .NET',
         author: 'Scott Hanselman',
         url: 'https://www.hanselman.com/blog/javascript-and-typescript-projects-with-react-angular-or-vue-in-visual-studio-2022-with-or-without-net',
         likes: 3,

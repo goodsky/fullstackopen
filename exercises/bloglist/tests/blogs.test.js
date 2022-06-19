@@ -19,18 +19,14 @@ describe('when reading the initial blogs', () => {
   });
 
   test('correct number of blogs are returned', async () => {
-    const response = await request
-      .get('/api/blogs')
-      .expect(200);
+    const response = await request.get('/api/blogs').expect(200);
 
     const blogs = response.body;
     expect(blogs).toHaveLength(helper.intitialBlogs.length);
   });
 
   test('a specific blog is within the returned blogs', async () => {
-    const response = await request
-      .get('/api/blogs')
-      .expect(200);
+    const response = await request.get('/api/blogs').expect(200);
 
     const blogs = response.body.map((blog) => ({
       title: blog.title,
@@ -43,9 +39,7 @@ describe('when reading the initial blogs', () => {
   });
 
   test('blogs contain an id property', async () => {
-    const response = await request
-      .get('/api/blogs')
-      .expect(200);
+    const response = await request.get('/api/blogs').expect(200);
     const firstBlog = response.body[0];
     expect(firstBlog.id).toBeDefined();
   });
@@ -121,10 +115,7 @@ describe('when posting a new blog', () => {
       url: 'https://netflixtechblog.com/fixing-performance-regressions-before-they-happen-eab2602b86fe',
     };
 
-    await request
-      .post('/api/blogs')
-      .send(newBlog)
-      .expect(401);
+    await request.post('/api/blogs').send(newBlog).expect(401);
   });
 
   test('if token for invalid user then return bad request', async () => {
@@ -222,7 +213,11 @@ describe('when updating a blog', () => {
 
     const allBlogs2 = await helper.blogsInDb();
     expect(allBlogs2).not.toContainEqual(blog);
-    expect(allBlogs2).toContainEqual({ ...updatedBlog, id: blog.id, user: blog.user });
+    expect(allBlogs2).toContainEqual({
+      ...updatedBlog,
+      id: blog.id,
+      user: blog.user,
+    });
   });
 
   test('if owner, just likes can be updated', async () => {
@@ -275,10 +270,7 @@ describe('when updating a blog', () => {
       likes: 1337,
     };
 
-    await request
-      .put(`/api/blogs/${blog.id}`)
-      .send(updatedBlog)
-      .expect(401);
+    await request.put(`/api/blogs/${blog.id}`).send(updatedBlog).expect(401);
   });
 
   test('an empty body returns a 400 status code', async () => {
@@ -348,27 +340,23 @@ describe('when liking a blob', () => {
     const allBlogs = await helper.blogsInDb();
     const blog = allBlogs[1];
 
-    await request
-      .post(`/api/blogs/${blog.id}/likes`)
-      .expect(204);
+    await request.post(`/api/blogs/${blog.id}/likes`).expect(204);
 
     const allBlogs2 = await helper.blogsInDb();
-    const likedBlog = allBlogs2.find((blog2) => blog.id.toString() === blog2.id.toString());
+    const likedBlog = allBlogs2.find(
+      (blog2) => blog.id.toString() === blog2.id.toString(),
+    );
     expect(likedBlog.likes).toBe(blog.likes + 1);
   });
 
   test('a non-existant id returns a 404 status code', async () => {
     const missingId = await helper.nonExistingId();
 
-    await request
-      .post(`/api/blogs/${missingId}/likes`)
-      .expect(404);
+    await request.post(`/api/blogs/${missingId}/likes`).expect(404);
   });
 
   test('an invalid id returns a 404 status code', async () => {
-    await request
-      .put('/api/blogs/0/likes')
-      .expect(404);
+    await request.put('/api/blogs/0/likes').expect(404);
   });
 });
 
@@ -418,9 +406,7 @@ describe('when deleting an existing blog', () => {
     const allBlogs = await helper.blogsInDb();
     const blog = allBlogs[0];
 
-    await request
-      .delete(`/api/blogs/${blog.id}`)
-      .expect(401);
+    await request.delete(`/api/blogs/${blog.id}`).expect(401);
   });
 
   test('an invalid id returns a 404 status code', async () => {
