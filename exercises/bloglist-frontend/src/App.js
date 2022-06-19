@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import AddBlog from './components/AddBlog'
-import Blog from './components/Blog'
+import BlogDetails from './components/BlogDetails'
+import BlogList from './components/BlogList'
 import Login from './components/Login'
 import Notification from './components/Notification'
-import Toggleable from './components/Toggleable'
+import UserDetails from './components/UserDetails'
+import Users from './components/Users'
 
 import { initializeBlogs } from './reducers/blogs'
 import { checkForLoggedInUser, logoutUser } from './reducers/login'
@@ -18,8 +20,6 @@ const App = () => {
 
   useEffect(() => dispatch(initializeBlogs()), [])
   useEffect(() => dispatch(checkForLoggedInUser()), [])
-
-  const newBlogRef = useRef()
 
   if (!loggedInUser) {
     return (
@@ -41,17 +41,12 @@ const App = () => {
         <button onClick={() => dispatch(logoutUser())}>Logout</button>
       </div>
 
-      <h2>Add a Blog</h2>
-      <Toggleable buttonLabel="add new blog" ref={newBlogRef}>
-        <AddBlog parentRef={newBlogRef} />
-      </Toggleable>
-
-      <h2>The List</h2>
-      <div className="blog-container">
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
-      </div>
+      <Routes>
+        <Route path="/" element={<BlogList blogs={blogs} />} />
+        <Route path="/blogs/:id" element={<BlogDetails />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<UserDetails />} />
+      </Routes>
     </div>
   )
 }

@@ -2,6 +2,7 @@ import './Blog.css'
 
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { incrementLikes, deleteBlog } from '../reducers/blogs'
 
@@ -18,7 +19,7 @@ const Blog = ({ blog }) => {
     <div>
       <i>by {blog.author}</i>
       <br />
-      submitted by {blog.user.username}
+      submitted by {blog.user.name}
       <br />
       <a href={blog.url} target="_blank" rel="noreferrer noopener">
         {blog.url}
@@ -39,8 +40,8 @@ const Blog = ({ blog }) => {
 
   return (
     <div className="blog">
-      <u>{blog.title}</u>{' '}
-      <button onClick={toggleIsExpanded}>{isExpanded ? 'hide' : 'show'}</button>
+      <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+      <button onClick={toggleIsExpanded}>{isExpanded ? '-' : '+'}</button>
       {isExpanded ? blogDetails : null}
     </div>
   )

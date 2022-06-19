@@ -8,6 +8,11 @@ const Toggleable = forwardRef((props, ref) => {
   const showWhenVisible = { display: isVisible ? '' : 'none' }
   const hideWhenVisible = { display: isVisible ? 'none' : '' }
 
+  const topBotMargin = {
+    marginTop: 16,
+    marginBottom: 8,
+  }
+
   // This imperitive handle allows parent components to toggle visibility via a ref.
   // This is not the only way to do this and probably not the best.
   useImperativeHandle(ref, () => {
@@ -17,7 +22,7 @@ const Toggleable = forwardRef((props, ref) => {
   })
 
   return (
-    <>
+    <div style={topBotMargin}>
       <div style={hideWhenVisible}>
         <button onClick={() => setIsVisible(true)}>{buttonLabel}</button>
       </div>
@@ -25,7 +30,7 @@ const Toggleable = forwardRef((props, ref) => {
         {children}
         <button onClick={() => setIsVisible(false)}>Cancel</button>
       </div>
-    </>
+    </div>
   )
 })
 
