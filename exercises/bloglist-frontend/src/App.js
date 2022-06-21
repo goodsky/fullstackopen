@@ -12,7 +12,6 @@ import Users from './components/Users'
 
 import { initializeBlogs } from './reducers/blogs'
 import { checkForLoggedInUser } from './reducers/login'
-import './App.css'
 
 const App = () => {
   const dispatch = useDispatch()

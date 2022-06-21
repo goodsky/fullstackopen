@@ -1,10 +1,13 @@
 import { useSelector } from 'react-redux'
+import { Alert } from '@mui/material'
 
 const Notification = () => {
   const { message, isError } = useSelector((state) => state.notification)
 
   return message ? (
-    <div className={isError ? 'error-popup' : 'info-popup'}>{message}</div>
+    <Alert sx={{ mb: 3 }} severity={isError ? 'error' : 'success'}>
+      {message}
+    </Alert>
   ) : null
 }
 
