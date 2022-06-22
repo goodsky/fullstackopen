@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Box, Button, Grid, Paper, TextField } from '@mui/material'
+
 import { addBlog } from '../reducers/blogs'
 
 const AddBlog = ({ parentRef }) => {
@@ -27,36 +29,42 @@ const AddBlog = ({ parentRef }) => {
   }
 
   return (
-    <form onSubmit={handleAddBlog}>
-      <div>
-        title:
-        <input
-          type="text"
-          id="add-blog-title"
-          value={newBlogTitle}
-          onChange={(event) => setNewBlogTitle(event.target.value)}
-        />
-      </div>
-      <div>
-        author:
-        <input
-          type="text"
-          id="add-blog-author"
-          value={newBlogAuthor}
-          onChange={(event) => setNewBlogAuthor(event.target.value)}
-        />
-      </div>
-      <div>
-        url:
-        <input
-          type="text"
-          id="add-blog-url"
-          value={newBlogUrl}
-          onChange={(event) => setNewBlogUrl(event.target.value)}
-        />
-      </div>
-      <button type="submit">Add</button>
-    </form>
+    <Paper sx={{ p: 2 }} elevation={1}>
+      <Box component="form" onSubmit={handleAddBlog}>
+        <Grid container spacing={2} sx={{ mb: 2 }}>
+          <Grid item xs={6}>
+            <TextField
+              sx={{ width: '100%' }}
+              required
+              label="Title"
+              value={newBlogTitle}
+              onChange={(event) => setNewBlogTitle(event.target.value)}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              sx={{ width: '100%' }}
+              required
+              label="Author"
+              value={newBlogAuthor}
+              onChange={(event) => setNewBlogAuthor(event.target.value)}
+            />
+          </Grid>
+          <Grid item xs={8}>
+            <TextField
+              sx={{ width: '100%' }}
+              required
+              label="URL"
+              value={newBlogUrl}
+              onChange={(event) => setNewBlogUrl(event.target.value)}
+            />
+          </Grid>
+        </Grid>
+        <Button type="submit" color="primary" variant="contained">
+          Add
+        </Button>
+      </Box>
+    </Paper>
   )
 }
 

@@ -1,6 +1,8 @@
 import { forwardRef, useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
 
+import { Button } from '@mui/material'
+
 const Toggleable = forwardRef((props, ref) => {
   const { buttonLabel, children } = props
   const [isVisible, setIsVisible] = useState(false)
@@ -10,7 +12,7 @@ const Toggleable = forwardRef((props, ref) => {
 
   const topBotMargin = {
     marginTop: 16,
-    marginBottom: 8,
+    marginBottom: 16,
   }
 
   // This imperitive handle allows parent components to toggle visibility via a ref.
@@ -24,11 +26,11 @@ const Toggleable = forwardRef((props, ref) => {
   return (
     <div style={topBotMargin}>
       <div style={hideWhenVisible}>
-        <button onClick={() => setIsVisible(true)}>{buttonLabel}</button>
+        <Button onClick={() => setIsVisible(true)}>{buttonLabel}</Button>
       </div>
       <div style={showWhenVisible}>
         {children}
-        <button onClick={() => setIsVisible(false)}>Cancel</button>
+        <Button onClick={() => setIsVisible(false)}>Cancel</Button>
       </div>
     </div>
   )

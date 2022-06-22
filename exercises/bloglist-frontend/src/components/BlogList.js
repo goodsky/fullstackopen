@@ -1,14 +1,17 @@
 import { useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import {
+  Box,
+  Button,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
+  Typography,
 } from '@mui/material'
 
 import AddBlog from './AddBlog'
@@ -17,6 +20,7 @@ import { incrementLikes, deleteBlog } from '../reducers/blogs'
 
 export const Blog = ({ blog }) => {
   const dispatch = useDispatch()
+  const { loggedInUser } = useSelector((state) => state.login)
 
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -25,38 +29,34 @@ export const Blog = ({ blog }) => {
   }
 
   const blogDetails = (
-    <div>
+    <Box>
+      <i>{blog.user.name}</i>
+      <Typography>{blog.likes} likes</Typography>
+      <Button color="secondary" onClick={() => dispatch(incrementLikes(blog))}>
+        like
+      </Button>
+      {blog.user.username === loggedInUser.username ? (
+        <Button color="error" onClick={() => dispatch(deleteBlog(blog))}>
+          delete
+        </Button>
+      ) : null}
       <br />
-      submitted by {blog.user.name}
-      <br />
-      <a href={blog.url} target="_blank" rel="noreferrer noopener">
-        {blog.url}
-      </a>
-      <br />
-      <span>likes {blog.likes}</span>
-      <button onClick={() => dispatch(incrementLikes(blog))}>like</button>
-      <br />
-      <button
-        className="blog-deletebutton"
-        onClick={() => dispatch(deleteBlog(blog))}
-      >
-        delete
-      </button>
-      <br />
-    </div>
+    </Box>
   )
 
   return (
     <TableRow>
       <TableCell>
-        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+        <Link to={`/blogs/${blog.id}`}>
+          <Typography>{blog.title}</Typography>
+        </Link>
         {isExpanded ? blogDetails : null}
       </TableCell>
       <TableCell>
         <i>{blog.author}</i>
       </TableCell>
       <TableCell>
-        <button onClick={toggleIsExpanded}>{isExpanded ? '-' : '+'}</button>
+        <Button onClick={toggleIsExpanded}>{isExpanded ? '-' : '+'}</Button>
       </TableCell>
     </TableRow>
   )

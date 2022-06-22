@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import { Typography } from '@mui/material'
 import BlogDetails from './components/BlogDetails'
 import BlogList from './components/BlogList'
 import Login from './components/Login'
@@ -25,8 +26,10 @@ const App = () => {
   if (!loggedInUser) {
     return (
       <div>
-        <h1>Blog List</h1>
-        <h2>Login with your username and password</h2>
+        <Typography variant="h1">Blog List</Typography>
+        <Typography variant="h2">
+          Login with your username and password
+        </Typography>
         <Notification />
         <Login />
       </div>
@@ -36,7 +39,7 @@ const App = () => {
   return (
     <div>
       <NavBar />
-      <h1>Blog List</h1>
+      <Typography variant="h1">Blog List</Typography>
       <Notification />
       <Routes>
         <Route path="*" element={<NotFound />} />

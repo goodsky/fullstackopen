@@ -14,9 +14,11 @@ const blogsSlice = createSlice({
     },
     updateBlog: (state, action) => {
       const updatedBlog = action.payload
-      return state.map((blog) =>
+      const updatedBlogs = state.map((blog) =>
         blog.id === updatedBlog.id ? updatedBlog : blog
       )
+      updatedBlogs.sort((b1, b2) => b2.likes - b1.likes)
+      return updatedBlogs
     },
   },
 })
